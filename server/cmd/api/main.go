@@ -98,14 +98,19 @@ func main() {
 	r.Use(gin.Recovery())
 	r.Use(middleware.Logger(logger))
 
-	// CORS
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     cfg.CORS.AllowOrigins,
+	// CORS（开发模式放宽 Origin，生产使用配置清单）
+	corsCfg := cors.Config{
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-	}))
+	}
+	if cfg.Server.Mode == "release" {
+		corsCfg.AllowOrigins = cfg.CORS.AllowOrigins
+	} else {
+		corsCfg.AllowOriginFunc = func(origin string) bool { return true }
+	}
+	r.Use(cors.New(corsCfg))
 
 	// ── 7. 路由注册 ────────────────────────────────────────────────
 	// 健康检查（无需认证）
@@ -113,7 +118,7 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{
 			"code": 0,
 			"msg":  "ok",
-			"data": gin.H{"status": "healthy", "version": "03.26.2130"},
+				"data": gin.H{"status": "healthy", "version": "03.26.2159"},
 		})
 	})
 

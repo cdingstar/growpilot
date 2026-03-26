@@ -5,6 +5,7 @@ import Header from "@/components/header/Header";
 import CreateTeamModal from "@/components/shell/CreateTeamModal";
 import DashboardSidebar from "@/components/shell/DashboardSidebar";
 import Login from "@/components/Login";
+import GuestOverlay from "@/components/GuestOverlay";
 import { projectsApi } from "@/lib/api/projects";
 
 export default function DashboardGroupLayout({
@@ -35,17 +36,27 @@ export default function DashboardGroupLayout({
     return () => window.removeEventListener("growpilot:login", handleLogin);
   }, []);
 
-  // 监听 Token 失效 / 退出事件：弹出登录框，不强制刷新页面
+  // 监听 Token 失效事件（API 401）：弹出登录框
   useEffect(() => {
     const showLogin = () => {
       setAuthed(false);
       setIsLoginOpen(true);
     };
     window.addEventListener("growpilot:unauthorized", showLogin);
-    window.addEventListener("growpilot:logout", showLogin);
     return () => {
       window.removeEventListener("growpilot:unauthorized", showLogin);
-      window.removeEventListener("growpilot:logout", showLogin);
+    };
+  }, []);
+
+  // 监听退出事件：仅更新登录态，不强制弹出登录框（允许游客浏览）
+  useEffect(() => {
+    const handleLogout = () => {
+      setAuthed(false);
+      setIsLoginOpen(false);
+    };
+    window.addEventListener("growpilot:logout", handleLogout);
+    return () => {
+      window.removeEventListener("growpilot:logout", handleLogout);
     };
   }, []);
 
@@ -61,7 +72,15 @@ export default function DashboardGroupLayout({
             onOpenLogin={() => setIsLoginOpen(true)}
           />
 
-          <div className="flex-1 p-8 overflow-y-auto">{children}</div>
+          <div className="flex-1 p-8 overflow-y-auto">
+            {children}
+            {!authed && (
+              <GuestOverlay
+                onOpenLogin={() => setIsLoginOpen(true)}
+                isSidebarOpen={isSidebarOpen}
+              />
+            )}
+          </div>
         </main>
 
         <CreateTeamModal isOpen={isCreateTeamOpen} onClose={() => setIsCreateTeamOpen(false)} />

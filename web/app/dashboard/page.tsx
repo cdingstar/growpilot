@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { FolderUp, Plus, Sparkles, Video, Wand2, Zap, type LucideIcon } from "lucide-react";
-import { demoProjects, formatProjectTime } from "@/lib/demoProjects";
+import { FolderUp, Plus, Sparkles, Video, Wand2, Zap, Bot, type LucideIcon } from "lucide-react";
 import { authApi, type UserSummary } from "@/lib/api/auth";
 
 type StatItem = {
@@ -59,7 +58,6 @@ function buildStats(summary: UserSummary | null): StatItem[] {
 }
 
 export default function DashboardHomePage() {
-  const recentProjects = demoProjects.slice(0, 8);
   const [summary, setSummary] = useState<UserSummary | null>(null);
   const [userName, setUserName] = useState("Anna");
 
@@ -162,50 +160,19 @@ export default function DashboardHomePage() {
         ))}
       </div>
 
-      <div className="bg-[#0F1115] border border-white/5 rounded-2xl p-6">
-        <div className="flex items-center justify-between mb-5">
-          <div>
-            <div className="text-lg font-bold text-white">最近项目</div>
-            <div className="mt-1 text-sm text-gray-400">继续你上次的创作，或查看生成进度</div>
-          </div>
-          <Link href="/dashboard/project" className="text-sm font-bold text-blue-300 hover:text-blue-200 transition-colors">
-            查看全部
-          </Link>
+      <Link
+        href="/dashboard/marketing-assistant"
+        className="flex items-center gap-5 p-6 rounded-2xl bg-gradient-to-r from-violet-500/10 to-blue-500/10 border border-violet-500/20 hover:border-violet-500/40 transition-colors"
+      >
+        <div className="shrink-0 w-16 h-16 rounded-2xl bg-violet-500/15 border border-violet-500/30 flex items-center justify-center">
+          <Bot size={32} className="text-violet-300" />
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {recentProjects.map((project) => (
-            <Link
-              key={project.id}
-              href="/dashboard/project"
-              className="group relative rounded-2xl border border-white/5 overflow-hidden bg-white/5 hover:border-white/10 transition-colors"
-            >
-              <div className="relative w-full aspect-[16/10]">
-                <img
-                  src={project.cover}
-                  alt={project.name}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src =
-                      "https://images.unsplash.com/photo-1516117172878-fd2c41f4a759?auto=format&fit=crop&w=1200&q=80";
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
-                {project.statusText ? (
-                  <div className="absolute left-3 top-3 px-3 h-8 rounded-full bg-black/35 border border-white/10 backdrop-blur-md flex items-center text-xs font-bold text-white">
-                    {project.statusText}
-                  </div>
-                ) : null}
-              </div>
-
-              <div className="p-4">
-                <div className="text-white font-bold leading-snug line-clamp-2">{project.name}</div>
-                <div className="mt-2 text-xs text-gray-400">更新于 {formatProjectTime(project.updatedAt)}</div>
-              </div>
-            </Link>
-          ))}
+        <div className="flex-1 min-w-0">
+          <div className="text-base font-bold text-white">电商智能体</div>
+          <div className="text-sm text-gray-400 mt-0.5">AI 驱动的电商营销内容生成，帮你快速产出商品文案、营销素材</div>
         </div>
-      </div>
+        <div className="shrink-0 text-violet-400 text-sm font-semibold">立即使用 →</div>
+      </Link>
     </div>
   );
 }

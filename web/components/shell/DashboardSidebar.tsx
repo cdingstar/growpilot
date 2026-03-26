@@ -42,28 +42,7 @@ type SidebarItem = {
 
 const SIDEBAR_ITEMS: SidebarItem[] = [
   { icon: LayoutDashboard, label: "首页", href: "/dashboard" },
-  {
-    icon: Folder,
-    label: "我的项目",
-    href: "/dashboard/project",
-    children: [
-      { icon: Video, label: "AI 视频工场", href: "/dashboard/project?create=video" },
-      { icon: ImageIcon, label: "AI 绘画工作室", href: "/dashboard/project?create=image" },
-      { icon: Camera, label: "数字人", href: "/dashboard/project?create=avatar" },
-    ],
-  },
-  {
-    icon: FolderUp,
-    label: "资产",
-    href: "/dashboard/assets/hot",
-    children: [
-      { icon: FolderUp, label: "我的视图库", href: "/dashboard/assets/my" },
-      { icon: Mic, label: "我的声音", href: "/dashboard/assets/voice" },
-      { icon: TrendingUp, label: "当前热门", href: "/dashboard/assets/hot" },
-      { icon: Lightbulb, label: "发现灵感", href: "/dashboard/ideas" },
-    ],
-  },
-  { icon: Bot, label: "AI营销助手", href: "/dashboard/marketing-assistant" },
+  { icon: Bot, label: "电商智能体", href: "/dashboard/marketing-assistant" },
   { icon: Wand2, label: "AI创作工具", href: "/dashboard/tools" },
 ];
 
