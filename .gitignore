@@ -1,0 +1,28 @@
+# ── 前端 ─────────────────────────────────────────────────────────
+web/node_modules/
+web/.next/
+web/.env.local
+web/.vscode/
+web/.turbo/
+
+# ── 后端 ─────────────────────────────────────────────────────────
+server/bin/
+server/data/
+server/uploads/
+server/.env
+server/api
+
+# ── 系统文件 ──────────────────────────────────────────────────────
+.DS_Store
+*.log
+.idea/
+.vscode/
+.env
+.env.*
+.cache/
+.tmp/
+.Trash/
+.vercel/
+
+# ── 本地/工具配置 ─────────────────────────────────────────────────
+.claude/settings.local.json

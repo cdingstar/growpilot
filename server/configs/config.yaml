@@ -1,0 +1,34 @@
+# GrowPilot 后端配置文件
+# 敏感信息请通过环境变量覆盖（GP_ 前缀）或写入 .env 文件
+# 例如：GP_JWT_SECRET=your-secret  GP_AI_GOOGLE_API_KEY=your-key
+
+server:
+  port: "8080"
+  mode: "debug"   # debug | release
+
+database:
+  dsn: "data/growpilot.db"
+
+jwt:
+  secret: "change-me-in-production-please"
+  access_token_ttl: 60      # 分钟（1小时）
+  refresh_token_ttl: 30     # 天（30天）
+
+ai:
+  google_api_key: ""        # 通过环境变量 GP_AI_GOOGLE_API_KEY 注入
+
+  # 模型配置
+  # nano banane  → 快速/标准图片生成（gemini-2.5-flash-image）
+  # nano banane pro → 高质量图片生成（gemini pro image）
+  models:
+    image_standard: "gemini-2.5-flash-image-preview-0924"
+    image_pro:      "gemini-3-pro-image-preview"
+    image_default:  "gemini-2.5-flash-image-preview-0924"  # 默认使用 nano banane
+
+cors:
+  allow_origins:
+    - "http://localhost:3003"
+    - "http://localhost:3000"
+
+storage:
+  upload_dir: "uploads"

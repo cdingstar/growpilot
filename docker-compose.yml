@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  # ── Go 后端 ──────────────────────────────────────────────────
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: growpilot-server
+    ports:
+      - "8080:8080"
+    environment:
+      - GP_SERVER_MODE=release
+      - GP_JWT_SECRET=${GP_JWT_SECRET:-change-me}
+      - GP_AI_GOOGLE_API_KEY=${GP_AI_GOOGLE_API_KEY}
+      - GP_CORS_ALLOW_ORIGINS=http://localhost:3003
+      # Docker 中宿主机代理（macOS 用 host.docker.internal）
+      - HTTP_PROXY=http://host.docker.internal:1087
+      - HTTPS_PROXY=http://host.docker.internal:1087
+    volumes:
+      - server-data:/app/data
+      - server-uploads:/app/uploads
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:8080/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ── Next.js 前端 ─────────────────────────────────────────────
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: growpilot-web
+    ports:
+      - "3003:3003"
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
+    depends_on:
+      server:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  server-data:
+  server-uploads:
