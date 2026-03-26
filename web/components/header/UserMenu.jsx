@@ -261,21 +261,8 @@ export default function UserMenu({ onOpenCreateTeam, onOpenLogin }) {
     return () => window.removeEventListener("pointerdown", onPointerDown);
   }, [isOpen]);
 
-  // 未登录：只显示登录按钮
-  if (mounted && !authed) {
-    return (
-      <div className="pl-6 border-l border-white/10">
-        <button
-          type="button"
-          onClick={() => onOpenLogin?.()}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-full transition-all shadow-lg shadow-blue-500/20"
-        >
-          <User size={16} />
-          登录
-        </button>
-      </div>
-    );
-  }
+  // 未登录：在 Header 右上角由 GuestCTAs 统一展示登录与 CTA，此处不再渲染
+  if (mounted && !authed) return null;
 
   return (
     <div className="flex items-center gap-3 pl-6 border-l border-white/10 relative" ref={ref}>

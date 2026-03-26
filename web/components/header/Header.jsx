@@ -3,6 +3,7 @@
 import CoinsVipButton from "./CoinsVipButton";
 import HeaderSearch from "./HeaderSearch";
 import InviteRewardButton from "./InviteRewardButton";
+import GuestCTAs from "./GuestCTAs";
 import LanguageMenu from "./LanguageMenu";
 import NotificationButton from "./NotificationButton";
 import SidebarToggle from "./SidebarToggle";
@@ -24,9 +25,9 @@ export default function Header({ onToggleSidebar, onOpenCreateTeam, onOpenLogin 
         <HeaderSearch />
         <LanguageMenu />
         <NotificationButton />
+        <GuestCTAs onOpenLogin={onOpenLogin} />
         <UserMenu onOpenCreateTeam={onOpenCreateTeam} onOpenLogin={onOpenLogin} />
       </div>
     </header>
   );
 }
-

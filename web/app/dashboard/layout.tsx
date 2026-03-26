@@ -22,8 +22,6 @@ export default function DashboardGroupLayout({
     const token = localStorage.getItem("access_token");
     if (token) {
       setAuthed(true);
-    } else {
-      setIsLoginOpen(true);
     }
   }, []);
 
@@ -53,11 +51,6 @@ export default function DashboardGroupLayout({
 
   return (
     <>
-      {/* 未登录遮罩：挡住页面内容直到登录完成 */}
-      {!authed && (
-        <div className="fixed inset-0 bg-[#0B0D10] z-40" />
-      )}
-
       <div className="min-h-screen bg-[#0B0D10] text-white flex">
         <DashboardSidebar isOpen={isSidebarOpen} />
 
@@ -68,8 +61,7 @@ export default function DashboardGroupLayout({
             onOpenLogin={() => setIsLoginOpen(true)}
           />
 
-          {/* 未登录时不渲染子页面，防止子页面的 useEffect 提前发起 API 请求 */}
-          <div className="flex-1 p-8 overflow-y-auto">{authed ? children : null}</div>
+          <div className="flex-1 p-8 overflow-y-auto">{children}</div>
         </main>
 
         <CreateTeamModal isOpen={isCreateTeamOpen} onClose={() => setIsCreateTeamOpen(false)} />
@@ -77,8 +69,8 @@ export default function DashboardGroupLayout({
 
       <Login
         isOpen={isLoginOpen}
-        canClose={false}
-        onClose={() => {}}
+        canClose={true}
+        onClose={() => setIsLoginOpen(false)}
         onSuccess={() => {
           setIsLoginOpen(false);
           setAuthed(true);
