@@ -19,9 +19,9 @@ import {
 } from "lucide-react";
 
 const formatBuildStamp = (value: string | undefined) => {
-  if (!value) return "未知";
+  if (!value) return "2026 03 26";
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "未知";
+  if (Number.isNaN(date.getTime())) return "2026 03 26";
 
   const pad2 = (n: number) => String(n).padStart(2, "0");
   const yyyy = String(date.getFullYear());
@@ -71,7 +71,7 @@ export default function DashboardSidebar({ isOpen }: { isOpen: boolean }) {
   const appVersion = "0.1.1209";
   const buildHHMM = process.env.NEXT_PUBLIC_BUILD_HHMM ?? "";
   const [buildStamp, setBuildStamp] = useState("未知");
-  const copyrightText = "Copyright © 2025 后起智能";
+  const copyrightText = "Copyright © 2026 后起智能";
 
   useEffect(() => {
     setBuildStamp(formatBuildStamp(process.env.NEXT_PUBLIC_BUILD_TIME));
