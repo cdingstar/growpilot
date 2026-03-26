@@ -1,6 +1,7 @@
 # GrowPilot 项目更新日志
 
 ## 任务清单
+- 修改时间0326-211046、代码托管：初始化 Git 仓库并推送到 GitHub 仓库（main 分支）https://github.com/cdingstar/growpilot.git。
 - 修改时间0326-210649、仓库整理与上传准备：完善 .gitignore（忽略构建产物、二进制、私有配置等），同步前后端版本至 03.26.2106，准备初始化 Git 仓库并推送到 GitHub。
 - 修改时间0326-210009、运行环境：启动 Web 预览(http://localhost:3003) 与后端 Server(:8080)；Web 已就绪并启用热更新，Server 健康检查返回正常。
 - 修改时间0310-151000、功能移除：移除登录后的 Onboarding 向导页面，用户登录后直接进入 Dashboard，简化用户体验。
