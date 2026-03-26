@@ -1,6 +1,6 @@
 {
   "name": "growpilot-web",
-  "version": "03.26.2116",
+  "version": "03.26.2119",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3003",

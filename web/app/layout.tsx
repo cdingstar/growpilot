@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+const now = new Date();
+const pad = (n: number) => n.toString().padStart(2, "0");
+const HHMM = `${pad(now.getHours())}${pad(now.getMinutes())}`;
+
 export const metadata: Metadata = {
-  title: `GrowPilot${process.env.NEXT_PUBLIC_BUILD_HHMM ? `(${process.env.NEXT_PUBLIC_BUILD_HHMM})` : ""} MVP`,
+  title: `GrowPilot (${HHMM})`,
   description: "Build Growth Once, Scale Everywhere",
 };
 
