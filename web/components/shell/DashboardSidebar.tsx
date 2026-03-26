@@ -90,7 +90,7 @@ export default function DashboardSidebar({ isOpen }: { isOpen: boolean }) {
           </div>
           {isOpen && (
             <span className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
-              GrowPilot{buildHHMM ? `(${buildHHMM})` : ""}
+              GrowPilot{buildHHMM ? ` (${buildHHMM})` : ""}
             </span>
           )}
         </div>
