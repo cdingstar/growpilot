@@ -23,6 +23,7 @@ server/api
 .tmp/
 .Trash/
 .vercel/
+**/*.tsbuildinfo
 
 # ── 本地/工具配置 ─────────────────────────────────────────────────
 .claude/settings.local.json
