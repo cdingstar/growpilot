@@ -5,6 +5,8 @@ import Link from "next/link";
 import {
   Bot,
   Camera,
+  ChevronDown,
+  ChevronRight,
   Folder,
   FolderUp,
   Image as ImageIcon,
@@ -37,12 +39,37 @@ type SidebarItem = {
   icon: LucideIcon;
   label: string;
   href: string;
+  isHot?: boolean;
   children?: SidebarItem[];
 };
+
+const PRODUCT_IMAGE_CHILDREN: SidebarItem[] = [
+  { icon: ImageIcon, label: "卖点图设计", href: "/dashboard/product-image/selling-point" },
+  { icon: ImageIcon, label: "白底图设计", href: "/dashboard/product-image/white-bg" },
+  { icon: ImageIcon, label: "主图设计", href: "/dashboard/product-image/main" },
+  { icon: ImageIcon, label: "尺寸图设计", href: "/dashboard/product-image/size" },
+  { icon: ImageIcon, label: "细节图设计", href: "/dashboard/product-image/detail" },
+  { icon: ImageIcon, label: "场景渲染图", href: "/dashboard/product-image/scene-render" },
+  { icon: ImageIcon, label: "使用场景图", href: "/dashboard/product-image/scene-use" },
+  { icon: ImageIcon, label: "营销海报", href: "/dashboard/product-image/poster" },
+  { icon: ImageIcon, label: "场景替换", href: "/dashboard/product-image/scene-swap" },
+  { icon: ImageIcon, label: "产品替换", href: "/dashboard/product-image/product-swap" },
+];
+
+const MODEL_CHILDREN: SidebarItem[] = [
+  { icon: ImageIcon, label: "AI 模特", href: "/dashboard/model/ai-model", isHot: true },
+  { icon: ImageIcon, label: "姿势裂变", href: "/dashboard/model/pose", isHot: true },
+  { icon: ImageIcon, label: "产品数字人", href: "/dashboard/model/digital-human" },
+  { icon: ImageIcon, label: "角色替换", href: "/dashboard/model/role-swap" },
+  { icon: ImageIcon, label: "产品替换", href: "/dashboard/model/product-swap" },
+  { icon: ImageIcon, label: "场景替换", href: "/dashboard/model/scene-swap" },
+];
 
 const SIDEBAR_ITEMS: SidebarItem[] = [
   { icon: LayoutDashboard, label: "首页", href: "/dashboard" },
   { icon: Bot, label: "电商智能体", href: "/dashboard/marketing-assistant" },
+  { icon: Camera, label: "商品图设计", href: "/dashboard/product-image", children: PRODUCT_IMAGE_CHILDREN },
+  { icon: Mic, label: "产品模特", href: "/dashboard/model", children: MODEL_CHILDREN },
   { icon: Wand2, label: "AI创作工具", href: "/dashboard/tools" },
 ];
 
@@ -50,15 +77,20 @@ export default function DashboardSidebar({ isOpen }: { isOpen: boolean }) {
   const appVersion = "0.1.1209";
   const buildHHMM = process.env.NEXT_PUBLIC_BUILD_HHMM ?? "";
   const [buildStamp, setBuildStamp] = useState("未知");
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
   const copyrightText = "Copyright © 2026 后起智能";
 
   useEffect(() => {
     setBuildStamp(formatBuildStamp(process.env.NEXT_PUBLIC_BUILD_TIME));
   }, []);
 
+  const toggleExpand = (label: string) => {
+    setExpandedItems((prev) => ({ ...prev, [label]: !prev[label] }));
+  };
+
   return (
     <aside
-      className={`fixed left-0 top-0 h-screen bg-[#0F1115] border-r border-white/5 transition-all duration-300 z-30 ${
+      className={`fixed left-0 top-0 h-screen bg-[#0F1115] border-r border-white/5 transition-all duration-300 z-30 flex flex-col ${
         isOpen ? "w-64" : "w-20"
       }`}
     >
@@ -81,33 +113,63 @@ export default function DashboardSidebar({ isOpen }: { isOpen: boolean }) {
         </div>
       </div>
 
-      <nav className="px-3 space-y-2">
-        {SIDEBAR_ITEMS.map((item) => (
-          <div key={item.label} className="space-y-1">
-            <Link
-              href={item.href}
-              className="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-white/5 transition-colors group"
-            >
-              <item.icon size={22} className="group-hover:text-blue-400 transition-colors" />
-              {isOpen && <span>{item.label}</span>}
-            </Link>
+      <nav className="px-3 space-y-1 flex-1 overflow-y-auto">
+        {SIDEBAR_ITEMS.map((item) => {
+          const hasChildren = isOpen && !!item.children?.length;
+          const isExpanded = !!expandedItems[item.label];
 
-            {isOpen && item.children?.length ? (
-              <div className="space-y-1">
-                {item.children.map((child) => (
-                  <Link
-                    key={`${item.label}_${child.label}`}
-                    href={child.href}
-                    className="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-500 hover:text-white hover:bg-white/5 transition-colors group ml-6"
-                  >
-                    <child.icon size={18} className="group-hover:text-blue-400 transition-colors" />
-                    <span className="text-sm">{child.label}</span>
-                  </Link>
-                ))}
-              </div>
-            ) : null}
-          </div>
-        ))}
+          return (
+            <div key={item.label}>
+              {hasChildren ? (
+                /* 有子菜单：点击展开/收起，不跳转 */
+                <button
+                  type="button"
+                  onClick={() => toggleExpand(item.label)}
+                  className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-white/5 transition-colors group"
+                >
+                  <item.icon size={22} className="group-hover:text-blue-400 transition-colors shrink-0" />
+                  <span className="flex-1 text-left">{item.label}</span>
+                  {isExpanded
+                    ? <ChevronDown size={15} className="text-gray-500" />
+                    : <ChevronRight size={15} className="text-gray-500" />
+                  }
+                </button>
+              ) : (
+                /* 无子菜单：直接跳转 */
+                <Link
+                  href={item.href}
+                  className="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-white/5 transition-colors group"
+                >
+                  <item.icon size={22} className="group-hover:text-blue-400 transition-colors shrink-0" />
+                  {isOpen && <span>{item.label}</span>}
+                </Link>
+              )}
+
+              {/* 子菜单列表 */}
+              {hasChildren && isExpanded && (
+                <div className="mt-0.5 space-y-0.5">
+                  {item.children!.map((child) => (
+                    <Link
+                      key={child.href}
+                      href={child.href}
+                      className="flex items-center justify-between px-3 py-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-white/5 transition-colors group ml-3"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm">{child.label}</span>
+                        {child.isHot && (
+                          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-gradient-to-r from-orange-500 to-pink-500 text-white leading-none">
+                            HOT
+                          </span>
+                        )}
+                      </div>
+                      <ChevronRight size={13} className="text-gray-600 group-hover:text-gray-400 transition-colors" />
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </nav>
     </aside>
   );
