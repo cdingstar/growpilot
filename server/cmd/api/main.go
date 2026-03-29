@@ -118,7 +118,7 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{
 			"code": 0,
 			"msg":  "ok",
-			"data": gin.H{"status": "healthy", "version": "03.29.2047"},
+			"data": gin.H{"status": "healthy", "version": "03.29.2101"},
 		})
 	})
 

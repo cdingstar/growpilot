@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { HardDrive, Info, Lock, LogOut, Mail, User, Users, X, Zap } from "lucide-react";
+import VipRechargeModal from "../pay/VipRechargeModal";
 
 const STORAGE_KEY = "growpilot_user_profile";
 
@@ -105,6 +106,7 @@ export default function UserMenu({ onOpenCreateTeam, onOpenLogin }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isRechargeModalOpen, setIsRechargeModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [authed, setAuthed] = useState(false);
   const [txPage, setTxPage] = useState(1);
@@ -403,12 +405,13 @@ export default function UserMenu({ onOpenCreateTeam, onOpenLogin }) {
                 </div>
 
                 <div className="px-6 py-5">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 gap-3">
                     <div className="rounded-xl border border-white/10 bg-white/5 p-4">
                       <div className="flex items-center justify-between gap-3">
                         <div className="text-xs text-gray-400">积分</div>
                         <button
                           type="button"
+                          onClick={() => setIsRechargeModalOpen(true)}
                           className="h-8 px-3 rounded-full bg-blue-600/20 border border-blue-500/30 text-blue-200 text-xs font-semibold hover:bg-blue-600/25 transition-colors"
                         >
                           充值
@@ -417,26 +420,6 @@ export default function UserMenu({ onOpenCreateTeam, onOpenLogin }) {
                       <div className="mt-2 flex items-center gap-2">
                         <Zap size={18} className="text-blue-300" />
                         <div className="text-2xl font-extrabold text-white">{profile.points}</div>
-                      </div>
-                    </div>
-                    <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="text-xs text-gray-400">存储空间</div>
-                        <button
-                          type="button"
-                          className="h-8 px-3 rounded-full bg-blue-600/20 border border-blue-500/30 text-blue-200 text-xs font-semibold hover:bg-blue-600/25 transition-colors"
-                        >
-                          充值
-                        </button>
-                      </div>
-                      <div className="mt-2 flex items-center gap-2">
-                        <HardDrive size={18} className="text-gray-300" />
-                        <div className="text-base font-extrabold text-white">
-                          {Number(profile.storageUsedGb).toFixed(1)}GB / {profile.storageTotalGb}GB
-                        </div>
-                      </div>
-                      <div className="mt-1 text-xs text-gray-400">
-                        每月按占用空间扣积分（{profile.storageRatePointsPerGb} 积分/GB）：{Math.ceil(profile.storageUsedGb) * profile.storageRatePointsPerGb} 积分/月
                       </div>
                     </div>
                   </div>
@@ -616,6 +599,11 @@ export default function UserMenu({ onOpenCreateTeam, onOpenLogin }) {
             document.body
           )
         : null}
+
+      <VipRechargeModal
+        open={isRechargeModalOpen}
+        onClose={() => setIsRechargeModalOpen(false)}
+      />
     </div>
   );
 }
