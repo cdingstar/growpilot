@@ -1,6 +1,6 @@
 {
   "name": "growpilot-web",
-  "version": "03.29.2044",
+  "version": "03.29.2047",
   "private": true,
   "scripts": {
     "dev": "next dev --webpack -p 3010",
